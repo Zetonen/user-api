@@ -3,19 +3,26 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "engines": {"node": "22.2"},
+  "engines": {
+    "node": "22.2"
+  },
   "scripts": {
-    "start": "node --env-file=.env server",
-    "dev": "nodemon  --env-file=.env server",
+    "start": "cross-env NODE_ENV=production node --env-file=.env server",
+    "dev": "cross-env NODE_ENV=development nodemon  --env-file=.env server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.19.2",
-    "mongoose": "^8.4.4"
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.4",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
