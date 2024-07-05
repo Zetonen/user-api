@@ -7,7 +7,7 @@ mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(3000, () => {
-      console.log("Example app listening on port 3000!");
+      console.log("Example app listening on port 3000");
     });
   })
   .catch((e) => {
