@@ -5,8 +5,8 @@
   "type": "module",
   "engines": {"node": "22.2"},
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server",
+    "start": "node --env-file=.env server",
+    "dev": "nodemon  --env-file=.env server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
