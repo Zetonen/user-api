@@ -6,12 +6,6 @@ import authenticate from "../../middlewares/authenticate.js";
 import {validateBody} from "../../decorators/index.js";
 const usersRouter = express.Router();
 
-usersRouter.get("/", (req, res) => {
-  res.json({
-    message: "Ok",
-  });
-});
-
 usersRouter.post(
   "/signup",
   isEmptyBody,
