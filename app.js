@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 // import logger from "morgan";
 import usersRouter from "./routes/api/users-router.js";
+import todosRouter from "./routes/api/todos-router.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/users", usersRouter);
+app.use("/todos", todosRouter);
 
 app.use((req, res) => {
   res.status(404).json({
