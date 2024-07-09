@@ -1,11 +1,10 @@
 import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger.json";
 // import logger from "morgan";
 import usersRouter from "./routes/api/users-router.js";
 import todosRouter from "./routes/api/todos-router.js";
-
+import swaggerDocument from "./swagger.json" with { type: "json" };
 const app = express();
 
 // const formatLogger = app.get("env") === "development" ? "dev" : "short";
@@ -20,7 +19,7 @@ app.use((req, res, next) => {
 
 app.use("/users", usersRouter);
 app.use("/todos", todosRouter);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
   res.status(404).json({
