@@ -12,7 +12,7 @@ const getTodoById = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await Todo.findOne({ _id, owner });
   if (!result) {
-    throw HttpError(404, `Movie with id=${_id} not found`);
+    throw HttpError(404, `Todo with id=${_id} not found`);
   }
   res.json(result);
 };
@@ -28,7 +28,7 @@ const updateById = async (req, res) => {
 
   const result = await Todo.findByIdAndUpdate({ _id, owner }, req.body);
   if (!result) {
-    throw HttpError(404, `Movie with id=${_id} not found`);
+    throw HttpError(404, `Todo with id=${_id} not found`);
   }
   res.json(result);
 };
@@ -38,7 +38,7 @@ const deleteById = async (req, res) => {
   const result = await Todo.findByIdAndDelete({ _id, owner });
 
   if (!result) {
-    throw HttpError(404, `Movie with id=${_id} not found`);
+    throw HttpError(404, `Todo with id=${_id} not found`);
   }
   res.json({ message: "Delete success" });
 };

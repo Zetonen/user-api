@@ -1,25 +1,35 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.1",
   "info": {
-    "title": "User Registration API",
-    "description": "API for registering new users",
-    "version": "1.0.0",
-    "contact": {
-      "name": "Your Name",
-      "email": "youremail@example.com"
+    "version": "2.0.2",
+    "title": "Swagger test",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "servers": [
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json", "multipart/form-data"],
+  "servers": [{ "url": "https://user-api-jqba.onrender.com" }],
+  "tags": [
     {
-      "url": "https://user-api-jqba.onrender.com"
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Todo",
+      "description": "Todos endpoints"
     }
   ],
   "paths": {
-    "/signup": {
+    "/users/signup": {
       "post": {
-        "summary": "Register a new user",
-        "description": "Creates a new user account",
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
         "requestBody": {
+          "description": "Registration's object",
           "required": true,
           "content": {
             "application/json": {
@@ -30,84 +40,265 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "User registration successful",
+          "201": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User registration successful"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "userId": {
-                          "type": "string",
-                          "example": "1234567890"
-                        },
-                        "userName": {
-                          "type": "string",
-                          "example": "johndoe"
-                        },
-                        "email": {
-                          "type": "string",
-                          "example": "johndoe@example.com"
-                        }
-                      },
-                      "required": ["userId", "userName", "email"]
-                    }
-                  },
-                  "required": ["message", "data"]
+                  "$ref": "#/components/schemas/RegisterResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request - Invalid user data",
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Invalid user data"
-                    },
-                    "message": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "required": ["error", "message"]
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error",
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Email or password invalid!",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Internal Server Error"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "An unexpected error occurred"
-                    }
-                  },
-                  "required": ["error", "message"]
+                  "$ref": "#/components/schemas/LogoutResponse"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/todos": {
+      "get": {
+        "tags": ["Todo"],
+        "summary": "User get all todos",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTodosResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Todo"],
+        "summary": "Add todo",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTodosResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/todos/{todosId}": {
+      "get": {
+        "tags": ["Todo"],
+        "summary": "User get todo by id",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "todoId",
+            "in": "path",
+            "required": true,
+            "description": "todo id",
+            "example": "127a21edaab66a6268515111",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing  params/invalid format)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Todo"],
+        "summary": "Delete todo",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "todoId",
+            "in": "path",
+            "required": true,
+            "description": "todo id",
+            "example": "127a21edaab66a6268515111",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTodoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          },
+          "404": {
+            "description": "Todo with id = :todo is not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Todo"],
+        "summary": "User update todo by id",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "todoId",
+            "in": "path",
+            "required": true,
+            "description": "todo id",
+            "example": "127a21edaab66a6268515111",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "description": "updateTodo object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized/User not found",
+            "content": {}
+          },
+          "404": {
+            "description": "Todo with id = :todoId is not found"
           }
         }
       }
@@ -117,26 +308,169 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
+        "required": ["email", "password", "userName"],
         "properties": {
-          "userName": {
-            "type": "string",
-            "description": "Unique username for the user",
-            "example": "johndoe",
-            "required": true
-          },
           "email": {
             "type": "string",
-            "description": "Valid email address for the user",
-            "example": "johndoe@example.com",
-            "pattern": "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.(\\w{2,3})+$",
-            "required": true
+            "description": "User's email",
+            "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "Password for the user (minimum 6 characters)",
-            "example": "password123",
-            "minLength": 6,
-            "required": true
+            "description": "User's password",
+            "example": "qwerty123",
+            "minLength": 6
+          },
+          "userName": {
+            "type": "string",
+            "description": "User's password",
+            "example": "Andrew"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123",
+            "minLength": 6
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODdmNmRmMDU2OGFkODlhM2IxNWFlNiIsImlhdCI6MTcwMzUwNzcwMCwiZXhwIjoxNzAzNTkwNTAwfQ.WkpmwL_4x10LUZExsUvGLNycIdURE4g1Uw3xJGwcDf0"
+          },
+          "users": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "username": {
+                "type": "string",
+                "description": "User's name",
+                "example": ""
+              }
+            }
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODdmNmRmMDU2OGFkODlhM2IxNWFlNiIsImlhdCI6MTcwMzUwNzcwMCwiZXhwIjoxNzAzNTkwNTAwfQ.WkpmwL_4x10LUZExsUvGLNycIdURE4g1Uw3xJGwcDf0"
+          },
+          "users": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "username": {
+                "type": "string",
+                "description": "User's name",
+                "example": ""
+              }
+            }
+          }
+        }
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "User's logout",
+            "example": "Logout success!"
+          }
+        }
+      },
+      "TodoRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Todo title",
+            "example": "Home work"
+          },
+          "description": {
+            "type": "string",
+            "description": "Todo description",
+            "example": "Lorem ipsum!"
+          },
+          "level": {
+            "type": "string",
+            "description": "Todo level",
+            "example": "easy"
+          }
+        }
+      },
+      "TodoResponse": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Todo title",
+            "example": "Home work"
+          },
+          "description": {
+            "type": "string",
+            "description": "Todo description",
+            "example": "Lorem ipsum!"
+          },
+          "level": {
+            "type": "string",
+            "description": "Todo level",
+            "example": "easy"
+          },
+          "_id": {
+            "type": "string",
+            "description": "Todos id",
+            "example": "659e80898d8f007f26da900f"
+          }
+        }
+      },
+      "GetTodosResponse": {
+        "type": "array",
+        "items": { "$ref": "#/components/schemas/TodoResponse" }
+      },
+      "DeleteTodoResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Todo title",
+            "example": "Delete success"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Invalid value"
           }
         }
       }
