@@ -361,7 +361,7 @@
                 "description": "User's email",
                 "format": "email"
               },
-              "username": {
+              "userName": {
                 "type": "string",
                 "description": "User's name",
                 "example": ""
@@ -386,7 +386,7 @@
                 "description": "User's email",
                 "format": "email"
               },
-              "username": {
+              "userName": {
                 "type": "string",
                 "description": "User's name",
                 "example": ""
